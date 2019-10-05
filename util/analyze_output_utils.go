@@ -27,7 +27,7 @@ import (
 
 type Result interface {
 	OutputStruct() interface{}
-	OutputText(writer io.Writer, resultType string, format string) error
+	OutputText(writer io.Writer, resultType string, format string, terse bool) error
 }
 
 type AnalyzeResult struct {
@@ -42,14 +42,14 @@ func (r ListAnalyzeResult) OutputStruct() interface{} {
 	return r
 }
 
-func (r ListAnalyzeResult) OutputText(writer io.Writer, resultType string, format string) error {
+func (r ListAnalyzeResult) OutputText(writer io.Writer, resultType string, format string, terse bool) error {
 	analysis, valid := r.Analysis.([]string)
 	if !valid {
 		logrus.Error("Unexpected structure of Analysis.  Should be of type []string")
 		return fmt.Errorf("Could not output %s analysis result", r.AnalyzeType)
 	}
 	r.Analysis = analysis
-	return TemplateOutputFromFormat(writer, r, "ListAnalyze", format)
+	return TemplateOutputFromFormat(writer, r, "ListAnalyze", format, terse)
 
 }
 
@@ -74,7 +74,7 @@ func (r MultiVersionPackageAnalyzeResult) OutputStruct() interface{} {
 	return output
 }
 
-func (r MultiVersionPackageAnalyzeResult) OutputText(writer io.Writer, resultType string, format string) error {
+func (r MultiVersionPackageAnalyzeResult) OutputText(writer io.Writer, resultType string, format string, terse bool) error {
 	analysis, valid := r.Analysis.(map[string]map[string]PackageInfo)
 	if !valid {
 		logrus.Error("Unexpected structure of Analysis.  Should be of type map[string]map[string]PackageInfo")
@@ -92,7 +92,7 @@ func (r MultiVersionPackageAnalyzeResult) OutputText(writer io.Writer, resultTyp
 		AnalyzeType: r.AnalyzeType,
 		Analysis:    strAnalysis,
 	}
-	return TemplateOutputFromFormat(writer, strResult, "MultiVersionPackageAnalyze", format)
+	return TemplateOutputFromFormat(writer, strResult, "MultiVersionPackageAnalyze", format, terse)
 }
 
 type SingleVersionPackageAnalyzeResult AnalyzeResult
@@ -116,7 +116,7 @@ func (r SingleVersionPackageAnalyzeResult) OutputStruct() interface{} {
 	return output
 }
 
-func (r SingleVersionPackageAnalyzeResult) OutputText(writer io.Writer, diffType string, format string) error {
+func (r SingleVersionPackageAnalyzeResult) OutputText(writer io.Writer, diffType string, format string, terse bool) error {
 	analysis, valid := r.Analysis.(map[string]PackageInfo)
 	if !valid {
 		logrus.Error("Unexpected structure of Analysis.  Should be of type map[string]PackageInfo")
@@ -134,7 +134,7 @@ func (r SingleVersionPackageAnalyzeResult) OutputText(writer io.Writer, diffType
 		AnalyzeType: r.AnalyzeType,
 		Analysis:    strAnalysis,
 	}
-	return TemplateOutputFromFormat(writer, strResult, "SingleVersionPackageAnalyze", format)
+	return TemplateOutputFromFormat(writer, strResult, "SingleVersionPackageAnalyze", format, terse)
 }
 
 type SingleVersionPackageLayerAnalyzeResult AnalyzeResult
@@ -174,7 +174,7 @@ func (r SingleVersionPackageLayerAnalyzeResult) OutputStruct() interface{} {
 	return output
 }
 
-func (r SingleVersionPackageLayerAnalyzeResult) OutputText(writer io.Writer, diffType string, format string) error {
+func (r SingleVersionPackageLayerAnalyzeResult) OutputText(writer io.Writer, diffType string, format string, terse bool) error {
 	analysis, valid := r.Analysis.(PackageLayerDiff)
 	if !valid {
 		logrus.Error("Unexpected structure of Analysis.  Should be of type PackageLayerDiff")
@@ -206,7 +206,7 @@ func (r SingleVersionPackageLayerAnalyzeResult) OutputText(writer io.Writer, dif
 		AnalyzeType: r.AnalyzeType,
 		Analysis:    analysisOutput,
 	}
-	return TemplateOutputFromFormat(writer, strResult, "SingleVersionPackageLayerAnalyze", format)
+	return TemplateOutputFromFormat(writer, strResult, "SingleVersionPackageLayerAnalyze", format, terse)
 }
 
 type PackageOutput struct {
@@ -264,7 +264,7 @@ func (r FileAnalyzeResult) OutputStruct() interface{} {
 	return r
 }
 
-func (r FileAnalyzeResult) OutputText(writer io.Writer, analyzeType string, format string) error {
+func (r FileAnalyzeResult) OutputText(writer io.Writer, analyzeType string, format string, terse bool) error {
 	analysis, valid := r.Analysis.([]util.DirectoryEntry)
 	if !valid {
 		logrus.Error("Unexpected structure of Analysis.  Should be of type []DirectoryEntry")
@@ -287,7 +287,7 @@ func (r FileAnalyzeResult) OutputText(writer io.Writer, analyzeType string, form
 		AnalyzeType: r.AnalyzeType,
 		Analysis:    strAnalysis,
 	}
-	return TemplateOutputFromFormat(writer, strResult, "FileAnalyze", format)
+	return TemplateOutputFromFormat(writer, strResult, "FileAnalyze", format, terse)
 }
 
 type FileLayerAnalyzeResult AnalyzeResult
@@ -311,7 +311,7 @@ func (r FileLayerAnalyzeResult) OutputStruct() interface{} {
 	return r
 }
 
-func (r FileLayerAnalyzeResult) OutputText(writer io.Writer, analyzeType string, format string) error {
+func (r FileLayerAnalyzeResult) OutputText(writer io.Writer, analyzeType string, format string, terse bool) error {
 	analysis, valid := r.Analysis.([][]util.DirectoryEntry)
 	if !valid {
 		logrus.Error("Unexpected structure of Analysis.  Should be of type []DirectoryEntry")
@@ -339,7 +339,7 @@ func (r FileLayerAnalyzeResult) OutputText(writer io.Writer, analyzeType string,
 		AnalyzeType: r.AnalyzeType,
 		Analysis:    strDirectoryEntries,
 	}
-	return TemplateOutputFromFormat(writer, strResult, "FileLayerAnalyze", format)
+	return TemplateOutputFromFormat(writer, strResult, "FileLayerAnalyze", format, terse)
 }
 
 type SizeAnalyzeResult AnalyzeResult
@@ -354,7 +354,7 @@ func (r SizeAnalyzeResult) OutputStruct() interface{} {
 	return r
 }
 
-func (r SizeAnalyzeResult) OutputText(writer io.Writer, analyzeType string, format string) error {
+func (r SizeAnalyzeResult) OutputText(writer io.Writer, analyzeType string, format string, terse bool) error {
 	analysis, valid := r.Analysis.([]SizeEntry)
 	if !valid {
 		logrus.Error("Unexpected structure of Analysis.  Should be of type []SizeEntry")
@@ -372,7 +372,7 @@ func (r SizeAnalyzeResult) OutputText(writer io.Writer, analyzeType string, form
 		AnalyzeType: r.AnalyzeType,
 		Analysis:    strAnalysis,
 	}
-	return TemplateOutputFromFormat(writer, strResult, "SizeAnalyze", format)
+	return TemplateOutputFromFormat(writer, strResult, "SizeAnalyze", format, terse)
 }
 
 type SizeLayerAnalyzeResult AnalyzeResult
@@ -387,7 +387,7 @@ func (r SizeLayerAnalyzeResult) OutputStruct() interface{} {
 	return r
 }
 
-func (r SizeLayerAnalyzeResult) OutputText(writer io.Writer, analyzeType string, format string) error {
+func (r SizeLayerAnalyzeResult) OutputText(writer io.Writer, analyzeType string, format string, terse bool) error {
 	analysis, valid := r.Analysis.([]SizeEntry)
 	if !valid {
 		logrus.Error("Unexpected structure of Analysis.  Should be of type []SizeEntry")
@@ -405,5 +405,5 @@ func (r SizeLayerAnalyzeResult) OutputText(writer io.Writer, analyzeType string,
 		AnalyzeType: r.AnalyzeType,
 		Analysis:    strAnalysis,
 	}
-	return TemplateOutputFromFormat(writer, strResult, "SizeLayerAnalyze", format)
+	return TemplateOutputFromFormat(writer, strResult, "SizeLayerAnalyze", format, terse)
 }

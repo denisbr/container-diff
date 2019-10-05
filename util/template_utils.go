@@ -16,6 +16,8 @@ limitations under the License.
 
 package util
 
+const FSDiffOutputTerse = `{{if not .Diff.Adds}}0{{else}}1{{end}}{{if not .Diff.Dels}}0{{else}}1{{end}}{{if not .Diff.Mods}}0{{else}}1{{end}}`
+
 const FSDiffOutput = `
 -----{{.DiffType}}-----
 
@@ -29,6 +31,7 @@ These entries have been changed between {{.Image1}} and {{.Image2}}:{{if not .Di
 FILE	SIZE1	SIZE2{{range .Diff.Mods}}{{"\n"}}{{.Name}}	{{.Size1}}	{{.Size2}}{{end}}
 {{end}}
 `
+
 const FSLayerDiffOutput = `
 -----{{.DiffType}}-----
 
@@ -47,6 +50,8 @@ FILE	SIZE1	SIZE2{{range $diff.Mods}}{{"\n"}}{{.Name}}	{{.Size1}}	{{.Size2}}{{end
 {{end}}
 `
 
+const SingleVersionDiffOutputTerse = `{{if not .Diff.Packages1}}0{{else}}1{{end}}{{if not .Diff.Packages2}}0{{else}}1{{end}}{{if not .Diff.InfoDiff}}0{{else}}1{{end}}`
+
 const SingleVersionDiffOutput = `
 -----{{.DiffType}}-----
 
@@ -61,6 +66,8 @@ PACKAGE	IMAGE1 ({{.Image1}})	IMAGE2 ({{.Image2}}){{range .Diff.InfoDiff}}{{"\n"}
 {{end}}
 `
 
+const MultiVersionDiffOutputTerse = `{{if not .Diff.Packages1}}0{{else}}1{{end}}{{if not .Diff.Packages2}}0{{else}}1{{end}}{{if not .Diff.InfoDiff}}0{{else}}1{{end}}`
+
 const MultiVersionDiffOutput = `
 -----{{.DiffType}}-----
 
@@ -74,6 +81,8 @@ Version differences:{{if not .Diff.InfoDiff}} None{{else}}
 PACKAGE	IMAGE1 ({{.Image1}})	IMAGE2 ({{.Image2}}){{range .Diff.InfoDiff}}{{"\n"}}{{print "-"}}{{.Package}}	{{range .Info1}}{{.Version}}, {{.Size}}{{end}}	{{range .Info2}}{{.Version}}, {{.Size}}{{end}}{{end}}
 {{end}}
 `
+
+const HistoryDiffOutputTerse = `{{if not .Diff.Adds}}0{{else}}1{{end}}{{if not .Diff.Dels}}0{{else}}1{{end}}`
 
 const HistoryDiffOutput = `
 -----{{.DiffType}}-----
@@ -99,6 +108,8 @@ const FilenameDiffOutput = `
 
 {{.Diff}}
 `
+
+const SizeDiffOutputTerse = `{{if not .Diff}}0{{else}}1{{end}}`
 
 const SizeDiffOutput = `
 -----{{.DiffType}}-----

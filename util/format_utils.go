@@ -30,10 +30,14 @@ import (
 
 var templates = map[string]string{
 	"SingleVersionPackageDiff":         SingleVersionDiffOutput,
+	"SingleVersionPackageDiffTerse":    SingleVersionDiffOutputTerse,
 	"MultiVersionPackageDiff":          MultiVersionDiffOutput,
+	"MultiVersionPackageDiffTerse":     MultiVersionDiffOutputTerse,
 	"HistDiff":                         HistoryDiffOutput,
+	"HistDiffTerse":                    HistoryDiffOutputTerse,
 	"MetadataDiff":                     MetadataDiffOutput,
 	"DirDiff":                          FSDiffOutput,
+	"DirDiffTerse":                     FSDiffOutputTerse,
 	"MultipleDirDiff":                  FSLayerDiffOutput,
 	"FilenameDiff":                     FilenameDiffOutput,
 	"ListAnalyze":                      ListAnalysisOutput,
@@ -42,6 +46,7 @@ var templates = map[string]string{
 	"SizeAnalyze":                      SizeAnalysisOutput,
 	"SizeLayerAnalyze":                 SizeLayerAnalysisOutput,
 	"SizeDiff":                         SizeDiffOutput,
+	"SizeDiffTerse":                    SizeDiffOutputTerse,
 	"SizeLayerDiff":                    SizeLayerDiffOutput,
 	"MultiVersionPackageAnalyze":       MultiVersionPackageOutput,
 	"SingleVersionPackageAnalyze":      SingleVersionPackageOutput,
@@ -87,7 +92,10 @@ func TemplateOutput(writer io.Writer, diff interface{}, templateType string) err
 	return nil
 }
 
-func TemplateOutputFromFormat(writer io.Writer, diff interface{}, templateType string, format string) error {
+func TemplateOutputFromFormat(writer io.Writer, diff interface{}, templateType string, format string, terse bool) error {
+	if terse {
+		templateType = templateType + "Terse"
+	}
 	if format == "" {
 		return TemplateOutput(writer, diff, templateType)
 	}
