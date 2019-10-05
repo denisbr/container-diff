@@ -1,7 +1,7 @@
 # container-diff
 
 [![Build
-Status](https://travis-ci.org/GoogleContainerTools/container-diff.svg?branch=master)](https://travis-ci.org/GoogleContainerTools/container-diff)
+Status](https://travis-ci.org/denisbr/container-diff.svg?branch=master)](https://travis-ci.org/denisbr/container-diff)
 
 ## What is container-diff?
 
