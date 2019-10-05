@@ -28,6 +28,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+var terse bool
+
 var templates = map[string]string{
 	"SingleVersionPackageDiff":         SingleVersionDiffOutput,
 	"SingleVersionPackageDiffTerse":    SingleVersionDiffOutputTerse,
@@ -92,7 +94,7 @@ func TemplateOutput(writer io.Writer, diff interface{}, templateType string) err
 	return nil
 }
 
-func TemplateOutputFromFormat(writer io.Writer, diff interface{}, templateType string, format string, terse bool) error {
+func TemplateOutputFromFormat(writer io.Writer, diff interface{}, templateType string, format string) error {
 	if terse {
 		templateType = templateType + "Terse"
 	}

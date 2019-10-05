@@ -43,7 +43,6 @@ var noCache bool
 
 var outputFile string
 var forceWrite bool
-var terse bool
 var cacheDir string
 var LogLevel string
 var format string
@@ -93,7 +92,7 @@ func outputResults(resultMap map[string]util.Result) {
 		if json {
 			results[i] = result.OutputStruct()
 		} else {
-			err := result.OutputText(writer, analyzerType, format, terse)
+			err := result.OutputText(writer, analyzerType, format)
 			if err != nil {
 				logrus.Error(err)
 			}
@@ -243,5 +242,5 @@ func addSharedFlags(cmd *cobra.Command) {
 	cmd.Flags().StringVarP(&cacheDir, "cache-dir", "c", "", "cache directory base to create .container-diff (default is $HOME).")
 	cmd.Flags().StringVarP(&outputFile, "output", "w", "", "output file to write to (default writes to the screen).")
 	cmd.Flags().BoolVar(&forceWrite, "force", false, "force overwrite output file, if exists already.")
-	cmd.Flags().BoolVar(&terse, "terse", false, "use terse output, for easier scripting.")
+	cmd.Flags().BoolVar(&util.terse, "terse", false, "use terse output, for easier scripting.")
 }
