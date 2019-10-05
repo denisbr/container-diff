@@ -27,7 +27,7 @@ import (
 
 	"github.com/GoogleContainerTools/container-diff/differs"
 	pkgutil "github.com/GoogleContainerTools/container-diff/pkg/util"
-	"github.com/GoogleContainerTools/container-diff/util"
+	"github.com/denisbr/container-diff/util"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
